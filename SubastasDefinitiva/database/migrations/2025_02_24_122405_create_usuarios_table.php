@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('correo')->unique();
-            $table->string('password');
+            $table->string('contrasenia');
             $table->enum('rol', ['comprador', 'vendedor', 'admin'])->default('comprador');
             $table->decimal('saldo', 10, 2)->default(0);
             $table->timestamps();

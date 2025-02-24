@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('productos_subasta', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
+            $table->foreignId('subasta_id')->constrained('subastas')->onDelete('cascade');
             $table->timestamps();
         });
     }

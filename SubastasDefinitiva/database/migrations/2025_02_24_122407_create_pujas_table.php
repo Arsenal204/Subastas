@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('pujas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('emisor_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('receptor_id')->constrained('users')->onDelete('cascade');
+            $table->text('mensaje');
+            $table->boolean('leido')->default(false);
+            $table->enum('tipo', ['texto', 'imagen', 'archivo'])->default('texto');
             $table->timestamps();
         });
     }
