@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Subasta extends Model
 {
     use HasFactory;
+    protected $table = 'subasta';
     protected $fillable = ['usuario_id', 'precio_inicial', 'precio_actual', 'fecha_inicio', 'fecha_fin', 'estado'];
     
     public function usuario() {

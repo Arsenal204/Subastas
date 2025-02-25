@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Mensaje extends Model
 {
     use HasFactory;
+    protected $table = 'mensaje';
     protected $fillable = ['emisor_id', 'receptor_id', 'mensaje', 'leido', 'tipo'];
     
     public function emisor() {
