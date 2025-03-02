@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\RolManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,7 +10,15 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'rolmanager:user'])->name('dashboard');
+
+Route::get('/admin/dashboard', function () {
+    return view('admin');
+})->middleware(['auth', 'verified', 'rolmanager:admin'])->name('admin');
+
+Route::get('/vendedor/dashboard', function () {
+    return view('vendedor');
+})->middleware(['auth', 'verified', 'rolmanager:vendedor'])->name('vendedor');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

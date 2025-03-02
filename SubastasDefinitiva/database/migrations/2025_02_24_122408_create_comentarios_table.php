@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('comentarios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('subasta_id')->constrained('subastas')->onDelete('cascade');
             $table->text('comentario');
             $table->integer('valoracion')->checkBetween(1, 5);
