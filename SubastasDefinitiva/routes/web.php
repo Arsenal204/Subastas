@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RolManager;
+use App\Http\Controllers\SubastaController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+//Rutas de la subasta
+
+Route::get('/dashboard', [SubastaController::class, 'dashboard'])->name('dashboard');
+
+
+
 
 //Rutas del pago
 use App\Http\Controllers\PagoController;
