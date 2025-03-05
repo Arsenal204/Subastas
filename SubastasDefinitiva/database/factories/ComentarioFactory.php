@@ -15,7 +15,7 @@ class ComentarioFactory extends Factory {
 
     public function definition(): array {
         return [
-            'usuario_id' => User::factory(),
+            'user_id' => User::factory(),
             'subasta_id' => Subasta::factory(),
             'comentario' => fake()->text(),
             'valoracion' => fake()->numberBetween(1, 5),

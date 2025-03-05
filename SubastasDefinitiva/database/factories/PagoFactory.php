@@ -16,7 +16,7 @@ class PagoFactory extends Factory {
 
     public function definition(): array {
         return [
-            'usuario_id' => User::factory(),
+            'user_id' => User::factory(),
             'subasta_id' => Subasta::factory(),
             'monto' => fake()->randomFloat(2, 10, 5000),
             'estado' => fake()->randomElement(['pendiente', 'completado', 'fallido']),

@@ -14,7 +14,7 @@ class SubastaFactory extends Factory {
 
     public function definition(): array {
         return [
-            'usuario_id' => User::factory(),
+            'user_id' => User::factory(),
             'precio_inicial' => fake()->randomFloat(2, 10, 1000),
             'precio_actual' => fake()->randomFloat(2, 10, 1000),
             'fecha_inicio' => fake()->dateTime(),

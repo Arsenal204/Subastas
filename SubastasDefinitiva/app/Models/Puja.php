@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Puja extends Model
 {
     use HasFactory;
-    protected $table = 'puja';
-    protected $fillable = ['subasta_id', 'usuario_id', 'monto', 'es_ganadora', 'autopuja'];
-    
-    public function subasta() {
+    protected $table = 'pujas';
+    protected $fillable = ['subasta_id', 'user_id', 'monto', 'es_ganadora', 'autopuja'];
+
+    public function subastas() {
         return $this->belongsTo(Subasta::class);
     }
-    
-    public function usuario() {
+
+    public function user() {
         return $this->belongsTo(User::class);
     }
 }

@@ -15,11 +15,11 @@ class PujaFactory extends Factory {
 
     public function definition(): array {
         return [
-            'subasta_id' => Subasta::factory(),
-            'usuario_id' => User::factory(),
-            'monto' => fake()->randomFloat(2, 10, 5000),
-            'es_ganadora' => false,
-            'autopuja' => fake()->boolean(),
+        'subasta_id' => Subasta::factory(),
+        'user_id' => User::factory(),
+        'monto' => $this->faker->randomFloat(2, 10, 5000),
+        'es_ganadora' => false,
+        'autopuja' => $this->faker->boolean,
         ];
     }
 }

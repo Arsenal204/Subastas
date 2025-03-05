@@ -16,7 +16,7 @@ class Producto extends Model
 
     public function subastas()
     {
-        return $this->belongsToMany(Subasta::class, 'producto_subasta');
+        return $this->belongsToMany(Subasta::class, 'productos_subasta');
     }
 
     public function categoria()
