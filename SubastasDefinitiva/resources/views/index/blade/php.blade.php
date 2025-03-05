@@ -2,38 +2,32 @@
 
 @section('content')
 <div class="container">
-    <h2>Lista de Pagos</h2>
-    <a href="{{ route('pagos.create') }}" class="btn btn-primary">Nuevo Pago</a>
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    <table class="table">
+    <h1>Lista de Productos</h1>
+    <a href="{{ route('productos.create') }}" class="btn btn-primary">Agregar Producto</a>
+    <table class="table mt-3">
         <thead>
             <tr>
-                <th>Usuario</th>
-                <th>Monto</th>
-                <th>Método de Pago</th>
-                <th>Estado</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($pagos as $pago)
-            <tr>
-                <td>{{ $pago->usuario->nombre }}</td>
-                <td>${{ $pago->monto }}</td>
-                <td>{{ $pago->metodo_pago }}</td>
-                <td>{{ ucfirst($pago->estado) }}</td>
-                <td>
-                    <a href="{{ route('pagos.edit', $pago->id) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('pagos.destroy', $pago->id) }}" method="POST" style="display:inline;">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger" onclick="return confirm('¿Eliminar pago?')">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
+            @foreach ($productos as $producto)
+                <tr>
+                    <td>{{ $producto->id }}</td>
+                    <td>{{ $producto->nombre }}</td>
+                    <td>${{ $producto->precio }}</td>
+                    <td>
+                        <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-info btn-sm">Ver</a>
+                        <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" style="display:inline;">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminarlo?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
