@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RolManager;
 use App\Http\Controllers\SubastaController;
 
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

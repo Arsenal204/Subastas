@@ -9,17 +9,19 @@ class Subasta extends Model
 {
     use HasFactory;
     protected $table = 'subastas';
-    protected $fillable = ['user_id', 'precio_inicial', 'precio_actual', 'fecha_inicio', 'fecha_fin', 'estado'];
-    
-    public function usuario() {
-        return $this->belongsTo(User::class);
-    }
-    
-    public function productos() {
+    protected $fillable = [
+        'usuario_id', 'precio_inicial', 'precio_actual',
+        'fecha_inicio', 'fecha_fin', 'estado'
+    ];
+
+    public function productos()
+    {
         return $this->belongsToMany(Producto::class, 'producto_subasta');
     }
-    
-    public function pujas() {
-        return $this->hasMany(Puja::class);
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class);
     }
 }
+

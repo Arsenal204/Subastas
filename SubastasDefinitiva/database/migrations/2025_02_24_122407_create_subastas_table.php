@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('subastas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
             $table->decimal('precio_inicial', 10, 2);
             $table->decimal('precio_actual', 10, 2);
             $table->dateTime('fecha_inicio');
