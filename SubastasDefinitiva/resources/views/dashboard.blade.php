@@ -2,34 +2,31 @@
 
 @section('content')
 <div class="container">
-    <h1>Lista de Productos</h1>
-    <a href="{{ route('productos.create') }}" class="btn btn-primary">Agregar Producto</a>
-    <table class="table mt-3">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($productos as $producto)
-                <tr>
-                    <td>{{ $producto->id }}</td>
-                    <td>{{ $producto->nombre }}</td>
-                    <td>${{ $producto->precio }}</td>
-                    <td>
-                        <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-info btn-sm">Ver</a>
-                        <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" style="display:inline;">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminarlo?')">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <h1 class="mb-4">Dashboard</h1>
+
+    <h2 class="mt-4">Subastas Activas</h2>
+
+    @isset($subastas)
+        @if($subastas->isEmpty())
+            <p>No hay subastas activas en este momento.</p>
+        @else
+            <div class="row">
+                @foreach($subastas as $subasta)
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ optional($subasta->producto)->nombre ?? 'Producto desconocido' }}</h5>
+                                <p class="card-text"><strong>Precio Actual:</strong> ${{ number_format($subasta->precio_actual, 2) }}</p>
+                                <p class="card-text"><strong>Finaliza en:</strong> {{ \Carbon\Carbon::parse($subasta->fecha_fin)->format('d/m/Y H:i') }}</p>
+                                <a href="{{ route('subastas.show', $subasta->id) }}" class="btn btn-primary">Ver Subasta</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    @else
+        <p>Error: No se encontraron subastas.</p>
+    @endisset
 </div>
 @endsection

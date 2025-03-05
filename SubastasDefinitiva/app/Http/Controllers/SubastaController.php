@@ -10,17 +10,14 @@ use App\Models\Subasta;
 
 class SubastaController extends Controller
 {
-public function dashboard()
-{
-    $subastas = Subasta::where('estado', 'activa')
-    ->where('fecha_inicio', '<=', now())
-    ->where('fecha_fin', '>=', now())
-    ->with('productos') // 🔹 Cargar los productos relacionados
-    ->get();
+    public function dashboard() {
+        $subastas = Subasta::where('estado', 'activa')
+            ->where('fecha_inicio', '<=', Carbon::now())
+            ->where('fecha_fin', '>=', Carbon::now())
+            ->get();
 
-
-    return view('dashboard', compact('subastas')); // 🔹 Pasar la variable a la vista
-}
+        return view('dashboard', compact('subastas'));
+    }
 
 
 

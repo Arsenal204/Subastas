@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/dashboard', [SubastaController::class, 'dashboard'])->name('dashboard');
 
+Route::get('/subastas/{id}', [SubastaController::class, 'show'])->name('subastas.show');
+
+
 
 
 
