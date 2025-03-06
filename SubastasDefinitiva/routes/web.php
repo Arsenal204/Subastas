@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
 //Rutas de la subasta
 
 Route::get('/dashboard', [SubastaController::class, 'dashboard'])->name('dashboard');
+Route::get('/vendedor', [SubastaController::class, 'vendedorDashboard'])->name('vendedor');
+Route::get('/admin/subastas', [SubastaController::class, 'adminSubastas'])->name('admin');
+
+
 
 Route::get('/subastas/{id}', [SubastaController::class, 'show'])->name('subastas.show');
 
