@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RolManager;
 use App\Http\Controllers\SubastaController;
+use App\Http\Controllers\PagoController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -38,14 +39,16 @@ Route::get('/admin/subastas', [SubastaController::class, 'adminSubastas'])->name
 
 
 Route::get('/subastas/{id}', [SubastaController::class, 'show'])->name('subastas.show');
-
-
+Route::get('/subastas/create', [SubastaController::class, 'create'])->name('subastas.create');
+Route::post('/subastas', [SubastaController::class, 'store'])->name('subastas.store');
+Route::get('/subastas/{id}/edit', [SubastaController::class, 'edit'])->name('subastas.edit');
+Route::put('/subastas/{id}', [SubastaController::class, 'update'])->name('subastas.update');
+Route::delete('/subastas/{id}', [SubastaController::class, 'destroy'])->name('subastas.destroy');
+Route::resource('subastas', SubastaController::class);
 
 
 
 //Rutas del pago
-use App\Http\Controllers\PagoController;
-
 Route::get('pagos', [PagoController::class, 'index'])->name('pagos.index');
 Route::get('pagos/create', [PagoController::class, 'crear'])->name('pagos.crear');
 Route::post('pagos', [PagoController::class, 'tienda'])->name('pagos.tienda');

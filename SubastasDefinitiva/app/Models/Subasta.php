@@ -23,5 +23,10 @@ class Subasta extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function pujas()
+    {
+        return $this->hasMany(Puja::class);
+    }
 }
 
