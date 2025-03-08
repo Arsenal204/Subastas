@@ -15,14 +15,6 @@
                 {{ \Carbon\Carbon::parse($subasta->fecha_fin)->format('d/m/Y H:i') }}
             </p>
 
-            <p><strong>Creador:</strong>
-                @if(isset($subasta->usuario) && !empty($subasta->usuario->name))
-                    {{ $subasta->usuario?->name }}
-                @else
-                    Usuario Desconocido
-                @endif
-            </p>
-
             @if($subasta->productos->isNotEmpty())
                 <h5>Productos en esta subasta:</h5>
                 <ul>
