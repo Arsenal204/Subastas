@@ -49,13 +49,18 @@ Route::resource('subastas', SubastaController::class);
 
 
 //Rutas del pago
-Route::get('pagos', [PagoController::class, 'index'])->name('pagos.index');
-Route::get('pagos/create', [PagoController::class, 'crear'])->name('pagos.crear');
-Route::post('pagos', [PagoController::class, 'tienda'])->name('pagos.tienda');
-Route::get('pagos/{id}', [PagoController::class, 'mostrar'])->name('pagos.mostrar');
-Route::get('pagos/{id}/edit', [PagoController::class, 'editar'])->name('pagos.editar');
-Route::put('pagos/{id}', [PagoController::class, 'actualizar'])->name('pagos.actualizar');
-Route::delete('pagos/{id}', [PagoController::class, 'eliminar'])->name('pagos.eliminar');
+
+Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
+Route::post('/pagos/checkout', [PagoController::class, 'checkout'])->name('pagos.checkout');
+
+Route::get('/pagos/exito', function () {
+    return "Pago exitoso.";
+})->name('pagos.exito');
+
+Route::get('/pagos/fallo', function () {
+    return "El pago falló.";
+})->name('pagos.fallo');
+
 
 
 require __DIR__.'/auth.php';

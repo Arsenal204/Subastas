@@ -3,92 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pago;
+use Laravel\Cashier\Exceptions\IncompletePayment;
+use Stripe\Stripe;
 
 class PagoController extends Controller
 {
-    /**
-     * Muestra todos los pagos.
-     */
     public function index()
     {
-        $pagos = Pago::all();
-        return view('pagos.index', compact('pagos'));
+        return view('pagos.index'); // Vista donde se mostrará el formulario de pago
     }
 
-    /**
-     * Muestra el formulario para crear un nuevo pago.
-     */
-    public function crear()
+    public function checkout(Request $request)
     {
-        return view('pagos.create');
-    }
+        $user = auth()->user(); // Obtiene el usuario autenticado
 
-    /**
-     * Guarda un nuevo pago en la base de datos.
-     */
-    public function tienda(Request $request)
-    {
-        $request->validate([
-            'usuario_id' => 'required|exists:usuarios,id',
-            'monto' => 'required|numeric|min:0',
-            'metodo_pago' => 'required|string|max:255'
-        ]);
+        try {
+            $paymentMethod = $request->input('payment_method');
 
-        Pago::create([
-            'usuario_id' => $request->usuario_id,
-            'monto' => $request->monto,
-            'metodo_pago' => $request->metodo_pago,
-            'estado' => 'pendiente'
-        ]);
+            // Crea o actualiza el cliente en Stripe
+            $user->createOrGetStripeCustomer();
+            $user->updateDefaultPaymentMethod($paymentMethod);
 
-        return redirect()->route('pagos.index')->with('success', 'Pago registrado correctamente.');
-    }
+            // Realiza el cobro (por ejemplo, $50.00)
+            $user->charge(5000, $paymentMethod);
 
-    /**
-     * Muestra un pago específico.
-     */
-    public function mostrar($id)
-    {
-        $pago = Pago::findOrFail($id);
-        return view('pagos.show', compact('pago'));
-    }
-
-    /**
-     * Muestra el formulario de edición de un pago.
-     */
-    public function editar($id)
-    {
-        $pago = Pago::findOrFail($id);
-        return view('pagos.edit', compact('pago'));
-    }
-
-    /**
-     * Actualiza un pago en la base de datos.
-     */
-    public function actualizar(Request $request, $id)
-    {
-        $request->validate([
-            'monto' => 'required|numeric|min:0',
-            'metodo_pago' => 'required|string|max:255',
-            'estado' => 'required|in:pendiente,completado,fallido'
-        ]);
-
-        $pago = Pago::findOrFail($id);
-        $pago->update($request->all());
-
-        return redirect()->route('pagos.index')->with('success', 'Pago actualizado correctamente.');
-    }
-
-    /**
-     * Elimina un pago de la base de datos.
-     */
-    public function eliminar($id)
-    {
-        $pago = Pago::findOrFail($id);
-        $pago->delete();
-
-        return redirect()->route('pagos.index')->with('success', 'Pago eliminado correctamente.');
+            return redirect()->route('pagos.exito')->with('success', 'Pago realizado con éxito.');
+        } catch (IncompletePayment $exception) {
+            return redirect()->route('pagos.fallo')->with('error', 'El pago no se pudo completar.');
+        }
     }
 }
-
