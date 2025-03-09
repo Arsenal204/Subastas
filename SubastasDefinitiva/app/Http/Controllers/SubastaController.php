@@ -105,6 +105,16 @@ public function create()
     return view('subastas.show', compact('subasta'));
 }
 
+public function cancelar($id)
+{
+    $subasta = Subasta::findOrFail($id);
+    $subasta->estado = 'cancelada';
+    $subasta->save();
+
+    return redirect()->back()->with('success', 'Subasta cancelada correctamente.');
+}
+
+
 }
 
 

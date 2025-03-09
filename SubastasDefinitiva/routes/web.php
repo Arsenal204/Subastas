@@ -46,6 +46,7 @@ Route::post('/subastas', [SubastaController::class, 'store'])->name('subastas.st
 Route::get('/subastas/{id}/edit', [SubastaController::class, 'edit'])->name('subastas.edit');
 Route::put('/subastas/{id}', [SubastaController::class, 'update'])->name('subastas.update');
 Route::delete('/subastas/{id}', [SubastaController::class, 'destroy'])->name('subastas.destroy');
+Route::patch('/subastas/{id}/cancelar', [SubastaController::class, 'cancelar'])->name('subastas.cancelar');
 Route::resource('subastas', SubastaController::class);
 
 
