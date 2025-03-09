@@ -18,7 +18,10 @@ class Producto extends Model
     {
         return $this->belongsToMany(Subasta::class, 'producto_subasta');
     }
-
+    public function comentarios()
+    {
+        return $this->hasMany(\App\Models\Comentario::class);
+    }
 
     public function categoria()
     {

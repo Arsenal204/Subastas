@@ -61,6 +61,18 @@ Route::get('/pagos/fallo', function () {
     return "El pago falló.";
 })->name('pagos.fallo');
 
+//auth
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
+    Route::post('/pagos/checkout', [PagoController::class, 'checkout'])->name('pagos.checkout');
+});
 
+Route::get('/pagos/exito', function () {
+    return "Pago realizado con éxito.";
+})->name('pagos.exito');
+
+Route::get('/pagos/fallo', function () {
+    return "Hubo un error en el pago.";
+})->name('pagos.fallo');
 
 require __DIR__.'/auth.php';

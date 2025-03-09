@@ -8,23 +8,36 @@ use Stripe\Stripe;
 
 class PagoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth'); // Verifica que el usuario esté autenticado
+    }
+
     public function index()
     {
-        return view('pagos.index'); // Vista donde se mostrará el formulario de pago
+        return view('pagos.index');
     }
 
     public function checkout(Request $request)
     {
-        $user = auth()->user(); // Obtiene el usuario autenticado
+        $user = auth()->user(); // Obtener el usuario autenticado
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para realizar el pago.');
+        }
 
         try {
             $paymentMethod = $request->input('payment_method');
 
-            // Crea o actualiza el cliente en Stripe
-            $user->createOrGetStripeCustomer();
+            // Crea un cliente en Stripe si aún no existe
+            if (!$user->hasStripeId()) {
+                $user->createAsStripeCustomer();
+            }
+
+            // Actualiza el método de pago
             $user->updateDefaultPaymentMethod($paymentMethod);
 
-            // Realiza el cobro (por ejemplo, $50.00)
+            // Cobrar al usuario ($50.00 en centavos = 5000)
             $user->charge(5000, $paymentMethod);
 
             return redirect()->route('pagos.exito')->with('success', 'Pago realizado con éxito.');

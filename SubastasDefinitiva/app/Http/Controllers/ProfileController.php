@@ -21,6 +21,18 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function show()
+{
+    $user = auth()->App();
+
+    // Obtener las subastas activas en las que el usuario está participando o ha creado
+    $subastasActivas = \App\Models\Subasta::where('user_id', $user->id)
+                            ->where('fecha_fin', '>', now()) // Subastas que aún no han terminado
+                            ->get();
+
+    return view('profile', compact('subastasActivas'));
+}
+
     /**
      * Update the user's profile information.
      */
