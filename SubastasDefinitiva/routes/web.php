@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RolManager;
 use App\Http\Controllers\SubastaController;
 use App\Http\Controllers\PagoController;
+use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ComentarioController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -75,4 +77,13 @@ Route::get('/pagos/fallo', function () {
     return "Hubo un error en el pago.";
 })->name('pagos.fallo');
 
+// Detalles del producto
+// Ruta para mostrar el detalle de un producto
+Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
+
+// Ruta para hacer una oferta en una subasta
+Route::post('/subastas/{subasta}/pujar', [SubastaController::class, 'pujar'])->name('subastas.pujar');
+
+// Ruta para agregar un comentario a un producto
+Route::post('/productos/{id}/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
 require __DIR__.'/auth.php';
