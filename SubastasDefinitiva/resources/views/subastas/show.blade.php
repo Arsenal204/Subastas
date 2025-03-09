@@ -20,6 +20,7 @@
                 <ul>
                     @foreach($subasta->productos as $producto)
                         <li>{{ $producto->nombre }}</li>
+                        <button class="btn btn-primary" onclick="window.location.href='{{ route('productos.show', $producto->id) }}'">Ver Detalles</button>
                     @endforeach
                 </ul>
             @else
