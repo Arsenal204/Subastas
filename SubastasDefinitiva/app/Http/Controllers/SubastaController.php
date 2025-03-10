@@ -13,7 +13,8 @@ use App\Models\User;
 
 class SubastaController extends Controller
 {
-    public function dashboard() {
+    public function dashboard()
+    {
         $subastas = Subasta::where('estado', 'activa')
             ->where('fecha_inicio', '<=', Carbon::now())
             ->where('fecha_fin', '>=', Carbon::now())
@@ -22,31 +23,35 @@ class SubastaController extends Controller
         return view('dashboard', compact('subastas'));
     }
 
-    public function vendedorDashboard() {
+    public function vendedorDashboard()
+    {
         $usuario = Auth::user();
         $subastas = Subasta::where('user_id', $usuario->id)->get();
 
         return view('vendedor', compact('subastas'));
     }
 
-public function adminSubastas() {
-    $subastas = Subasta::all();
-    return view('admin', compact('subastas'));
-}
-
-
-public function create()
+    public function adminSubastas()
     {
-        $productos = Producto::all();
+        $subastas = Subasta::all();
+        return view('admin', compact('subastas'));
+    }
+
+
+    public function create()
+    {
+        $productos = Producto::all(); // Obtener todos los productos
         return view('subastas.create', compact('productos'));
     }
+
 
     // Guardar subasta en la base de datos
     public function store(Request $request)
 {
     // Validación básica de los datos recibidos
     $request->validate([
-        'producto_id' => 'required|exists:productos,id',
+        'producto_id' => 'required|array|min:1', // Asegurando que sea un arreglo de productos
+        'producto_id.*' => 'exists:productos,id', // Validación individual para cada producto
         'precio_inicial' => 'required|numeric|min:0',
         'fecha_inicio' => 'required|date|after_or_equal:today',
         'fecha_fin' => 'required|date|after:fecha_inicio',
@@ -66,19 +71,18 @@ public function create()
         return back()->with('error', 'La fecha de fin debe ser al menos un día después de la fecha de inicio.');
     }
 
-    // Obtener el producto y calcular la suma de sus precios
-    $producto = Producto::find($request->producto_id);
-    $precio_total_producto = $producto->precio;
+    // Obtener los productos seleccionados y calcular el precio total
+    $productos = Producto::whereIn('id', $request->producto_id)->get();
+    $precio_total_producto = $productos->sum('precio_base'); // Usamos 'precio_base' de cada producto
 
     // Validar que el precio inicial sea mayor que la suma de los productos
     if ($request->precio_inicial <= $precio_total_producto) {
         return back()->with('error', 'El precio inicial debe ser mayor que la suma de los productos en la subasta.');
     }
 
-    // Asignar el usuario autenticado a la subasta
+    // Crear la subasta
     $subasta = new Subasta();
-    $subasta->producto_id = $request->producto_id;
-    $subasta->usuario_id = Auth::id();
+    $subasta->user_id = Auth::id();
     $subasta->precio_inicial = $request->precio_inicial;
     $subasta->precio_actual = $request->precio_inicial;
     $subasta->fecha_inicio = $fecha_inicio; // Se asigna la fecha de inicio hoy
@@ -86,8 +90,14 @@ public function create()
     $subasta->estado = 'activa';
     $subasta->save();
 
+    // Asociar los productos con la subasta en la tabla pivote
+    $subasta->productos()->attach($request->producto_id);
+
     return redirect()->back()->with('success', 'Subasta creada correctamente.');
 }
+
+
+
 
 
 
@@ -118,24 +128,20 @@ public function create()
 
         return redirect()->back()->with('success', 'Subasta actualizada correctamente.');
     }
+
     public function show($id)
-{
-    $subasta = Subasta::with(['productos', 'user'])->findOrFail($id);
+    {
+        $subasta = Subasta::with(['productos', 'user'])->findOrFail($id);
 
-    return view('subastas.show', compact('subasta'));
+        return view('subastas.show', compact('subasta'));
+    }
+
+    public function cancelar($id)
+    {
+        $subasta = Subasta::findOrFail($id);
+        $subasta->estado = 'cancelada';
+        $subasta->save();
+
+        return redirect()->back()->with('success', 'Subasta cancelada correctamente.');
+    }
 }
-
-public function cancelar($id)
-{
-    $subasta = Subasta::findOrFail($id);
-    $subasta->estado = 'cancelada';
-    $subasta->save();
-
-    return redirect()->back()->with('success', 'Subasta cancelada correctamente.');
-}
-
-
-}
-
-
-

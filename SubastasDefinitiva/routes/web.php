@@ -10,6 +10,7 @@ use App\Http\Controllers\ComentarioController;
 
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -26,6 +27,7 @@ Route::get('/vendedor/dashboard', function () {
     return view('vendedor');
 })->middleware(['auth', 'verified', 'rolmanager:vendedor'])->name('vendedor');
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -39,9 +41,9 @@ Route::get('/vendedor', [SubastaController::class, 'vendedorDashboard'])->name('
 Route::get('/admin/subastas', [SubastaController::class, 'adminSubastas'])->name('admin');
 
 
-
-Route::get('/subastas/{id}', [SubastaController::class, 'show'])->name('subastas.show');
 Route::get('/subastas/create', [SubastaController::class, 'create'])->name('subastas.create');
+Route::get('/subastas/{id}', [SubastaController::class, 'show'])->name('subastas.show');
+
 Route::post('/subastas', [SubastaController::class, 'store'])->name('subastas.store');
 Route::get('/subastas/{id}/edit', [SubastaController::class, 'edit'])->name('subastas.edit');
 Route::put('/subastas/{id}', [SubastaController::class, 'update'])->name('subastas.update');
