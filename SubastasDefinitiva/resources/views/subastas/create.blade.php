@@ -50,6 +50,7 @@
 
         <!-- Botón de Envío -->
         <button type="submit" class="btn btn-success">Crear Subasta</button>
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url()->previous() }}'">Cancelar</button>
     </form>
 </div>
 
@@ -76,5 +77,6 @@
             });
         });
     });
+
 </script>
 @endsection

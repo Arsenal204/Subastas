@@ -26,7 +26,10 @@
                 <p>No hay productos asociados.</p>
             @endif
 
-            <a href="{{ url()->previous() }}" class="btn btn-secondary mt-3">Volver</a>
+            @if($subasta->user_id === auth()->id())
+                <a href="{{ route('subastas.edit', $subasta->id) }}" class="btn btn-primary">Editar Subasta</a>
+            @endif
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url()->previous() }}'">Cancelar</button>
         </div>
     </div>
 </div>

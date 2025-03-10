@@ -40,13 +40,14 @@ Route::get('/dashboard', [SubastaController::class, 'dashboard'])->name('dashboa
 Route::get('/vendedor', [SubastaController::class, 'vendedorDashboard'])->name('vendedor');
 Route::get('/admin/subastas', [SubastaController::class, 'adminSubastas'])->name('admin');
 
-
+Route::get('/subastas/{id}/edit', [SubastaController::class, 'edit'])->name('subastas.edit');
 Route::get('/subastas/create', [SubastaController::class, 'create'])->name('subastas.create');
 Route::get('/subastas/{id}', [SubastaController::class, 'show'])->name('subastas.show');
 
 Route::post('/subastas', [SubastaController::class, 'store'])->name('subastas.store');
-Route::get('/subastas/{id}/edit', [SubastaController::class, 'edit'])->name('subastas.edit');
 Route::put('/subastas/{id}', [SubastaController::class, 'update'])->name('subastas.update');
+
+
 Route::delete('/subastas/{id}', [SubastaController::class, 'destroy'])->name('subastas.destroy');
 Route::patch('/subastas/{id}/cancelar', [SubastaController::class, 'cancelar'])->name('subastas.cancelar');
 Route::resource('subastas', SubastaController::class);
