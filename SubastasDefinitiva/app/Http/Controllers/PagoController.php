@@ -10,17 +10,16 @@ class PagoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); // Verifica que el usuario esté autenticado
     }
 
     public function index()
     {
-        return view('pagos.index');
+        return view('pagos.php');
     }
 
     public function checkout(Request $request)
     {
-        $user = auth()->user(); // Obtener el usuario autenticado
+        $user = request()->user(); // Obtener el usuario autenticado
 
         if (!$user) {
             return redirect()->route('login')->with('error', 'Debes iniciar sesión para realizar el pago.');

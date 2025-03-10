@@ -50,20 +50,6 @@ Route::patch('/subastas/{id}/cancelar', [SubastaController::class, 'cancelar'])-
 Route::resource('subastas', SubastaController::class);
 
 
-
-//Rutas del pago
-
-Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
-Route::post('/pagos/checkout', [PagoController::class, 'checkout'])->name('pagos.checkout');
-
-Route::get('/pagos/exito', function () {
-    return "Pago exitoso.";
-})->name('pagos.exito');
-
-Route::get('/pagos/fallo', function () {
-    return "El pago falló.";
-})->name('pagos.fallo');
-
 //auth
 Route::middleware(['auth'])->group(function () {
     Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
