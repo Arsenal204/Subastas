@@ -96,18 +96,12 @@ class SubastaController extends Controller
     return redirect()->back()->with('success', 'Subasta creada correctamente.');
 }
 
-
-
-
-
-
-
     // Mostrar formulario de edición
-    public function edit(Subasta $subasta)
-    {
-        $productos = Producto::all();
-        return view('subastas.edit', compact('subasta', 'productos'));
-    }
+    public function edit($id)
+{
+    $subasta = Subasta::findOrFail($id);
+    return view('subastas.edit', compact('subasta'));
+}
 
     // Actualizar subasta en la base de datos
     public function update(Request $request, Subasta $subasta)
