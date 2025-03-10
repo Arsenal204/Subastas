@@ -43,32 +43,52 @@ public function create()
 
     // Guardar subasta en la base de datos
     public function store(Request $request)
-    {
-        $request->validate([
-            'producto_id' => 'required|exists:productos,id',
-            'precio_inicial' => 'required|numeric|min:0',
-            'fecha_inicio' => 'required|date|after_or_equal:today',
-            'fecha_fin' => 'required|date|after:fecha_inicio',
-        ]);
+{
+    // Validación básica de los datos recibidos
+    $request->validate([
+        'producto_id' => 'required|exists:productos,id',
+        'precio_inicial' => 'required|numeric|min:0',
+        'fecha_inicio' => 'required|date|after_or_equal:today',
+        'fecha_fin' => 'required|date|after:fecha_inicio',
+    ]);
 
-        // Verifica que hay un usuario autenticado antes de usar su ID
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Debes iniciar sesión para crear una subasta.');
-        }
-
-        // Asignar el usuario autenticado a la subasta
-        $subasta = new Subasta();
-        $subasta->producto_id = $request->producto_id;
-        $subasta->usuario_id = Auth::id(); // Aquí usamos Auth::id() en vez de auth()->id()
-        $subasta->precio_inicial = $request->precio_inicial;
-        $subasta->precio_actual = $request->precio_inicial;
-        $subasta->fecha_inicio = $request->fecha_inicio;
-        $subasta->fecha_fin = $request->fecha_fin;
-        $subasta->estado = 'activa';
-        $subasta->save();
-
-        return redirect()->back()->with('success', 'Subasta creada correctamente.');
+    // Verifica que hay un usuario autenticado antes de usar su ID
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Debes iniciar sesión para crear una subasta.');
     }
+
+    // Asegurarse que la fecha de inicio sea hoy
+    $fecha_inicio = Carbon::today();
+
+    // Asegurarse que la fecha de fin sea al menos un día después de la fecha de inicio
+    $fecha_fin = Carbon::parse($request->fecha_fin);
+    if ($fecha_fin->lessThan($fecha_inicio->addDay())) {
+        return back()->with('error', 'La fecha de fin debe ser al menos un día después de la fecha de inicio.');
+    }
+
+    // Obtener el producto y calcular la suma de sus precios
+    $producto = Producto::find($request->producto_id);
+    $precio_total_producto = $producto->precio;
+
+    // Validar que el precio inicial sea mayor que la suma de los productos
+    if ($request->precio_inicial <= $precio_total_producto) {
+        return back()->with('error', 'El precio inicial debe ser mayor que la suma de los productos en la subasta.');
+    }
+
+    // Asignar el usuario autenticado a la subasta
+    $subasta = new Subasta();
+    $subasta->producto_id = $request->producto_id;
+    $subasta->usuario_id = Auth::id();
+    $subasta->precio_inicial = $request->precio_inicial;
+    $subasta->precio_actual = $request->precio_inicial;
+    $subasta->fecha_inicio = $fecha_inicio; // Se asigna la fecha de inicio hoy
+    $subasta->fecha_fin = $fecha_fin;
+    $subasta->estado = 'activa';
+    $subasta->save();
+
+    return redirect()->back()->with('success', 'Subasta creada correctamente.');
+}
+
 
 
 
