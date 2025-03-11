@@ -28,5 +28,10 @@ class Subasta extends Model
     {
         return $this->hasMany(Puja::class);
     }
+    public function comentarios()
+{
+    return $this->hasMany(Comentario::class);
+}
+
 }
 

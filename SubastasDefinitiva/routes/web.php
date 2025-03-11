@@ -75,6 +75,14 @@ Route::delete('/subastas/{id}', [SubastaController::class, 'destroy'])->name('su
 Route::patch('/subastas/{id}/cancelar', [SubastaController::class, 'cancelar'])->name('subastas.cancelar');
 Route::resource('subastas', SubastaController::class);
 
+// Rutas de comentarios
+Route::post('/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
+Route::get('/comentarios/{comentario}/edit', [ComentarioController::class, 'edit'])->name('comentarios.edit');
+Route::put('/comentarios/{comentario}', [ComentarioController::class, 'update'])->name('comentarios.update');
+Route::delete('/comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
+
+
+
 
 //auth
 Route::middleware(['auth'])->group(function () {
