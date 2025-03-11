@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mensaje;
-use App\Models\User; // Asegúrate de importar el modelo User
+use App\Models\User; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +26,7 @@ class MensajeController extends Controller
         })
         ->get();
 
-        return view('chat.index', compact('messages', 'usuarios')); // Pasar usuarios a la vista
+        return view('chat.index', compact('messages', 'usuarios'));
     }
 
     // Enviar un mensaje

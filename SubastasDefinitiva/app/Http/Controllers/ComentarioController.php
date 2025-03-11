@@ -10,7 +10,7 @@ class ComentarioController extends Controller
 {
     public function show($id)
     {
-        $subasta = Subasta::with('comentarios.user')->findOrFail($id); // Asegúrate de que sea "user", no "usuario"
+        $subasta = Subasta::with('comentarios.user')->findOrFail($id); 
         return view('subastas.show', compact('subasta'));
     }
 
@@ -19,7 +19,7 @@ class ComentarioController extends Controller
         // Validar la entrada, incluyendo la valoración
         $request->validate([
             'comentario' => 'required|string|max:255',
-            'valoracion' => 'required|integer|between:1,5', // Validar que la valoración esté entre 1 y 5
+            'valoracion' => 'required|integer|between:1,5', 
         ]);
 
         // Crear el comentario
@@ -27,8 +27,8 @@ class ComentarioController extends Controller
         $comentario->comentario = $request->comentario;
         $comentario->user_id = auth()->id();
         $comentario->subasta_id = $request->id;
-        $comentario->valoracion = $request->valoracion; // Asignar la valoración
-        $comentario->moderado = false; // O el valor que corresponda
+        $comentario->valoracion = $request->valoracion; 
+        $comentario->moderado = false; 
         $comentario->save();
 
         // Redirigir a la página de la subasta con un mensaje de éxito
@@ -56,11 +56,11 @@ class ComentarioController extends Controller
 
         // Validación del comentario
         $request->validate([
-            'comentario' => 'required|string|max:255', // Asegúrate de usar 'comentario' aquí
+            'comentario' => 'required|string|max:255',
         ]);
 
         // Actualizar el comentario
-        $comentario->comentario = $request->comentario; // Actualiza el contenido
+        $comentario->comentario = $request->comentario; 
         $comentario->save();
 
         // Redirigir de nuevo a la página de la subasta con un mensaje de éxito
