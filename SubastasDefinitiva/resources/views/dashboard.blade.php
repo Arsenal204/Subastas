@@ -4,6 +4,23 @@
 <div class="container">
     <h1 class="mb-4">Dashboard</h1>
 
+<!-- Formulario de búsqueda por categoría -->
+<div class="mb-4">
+    <form action="{{ route('dashboard.search') }}" method="GET">
+        <div class="form-group">
+            <label for="category">Buscar por categoría</label>
+            <input type="text" class="form-control" id="category" name="category" placeholder="Nombre de la categoría" value="{{ request('category') }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+</div>
+
+ <!-- Botón para ver categorías -->
+ <div class="mb-4">
+        <a href="{{ route('categorias.index') }}" class="btn btn-success">Ver Categorías</a>
+
+    </div>
+
     <h2 class="mt-4">Subastas Activas</h2>
 
     @isset($subastas)

@@ -4,8 +4,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RolManager;
 use App\Http\Controllers\SubastaController;
 use App\Http\Controllers\PagoController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\MensajeController;
+
+use App\Http\Controllers\SocialAuthController;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ComentarioController;
+
 
 
 use Illuminate\Support\Facades\Route;
@@ -32,7 +39,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+  // Ruta de cierre de sesión
+  Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
 });
+
+// Rutas de autenticación con GitHub
+Route::middleware('guest')->group(function () {
+    // Rutas de autenticación con GitHub solo para invitados
+    Route::get('auth/github', [SocialAuthController::class, 'redirectToGitHub'])->name('auth.github');
+    Route::get('auth/github/callback', [SocialAuthController::class, 'handleGitHubCallback'])->name('auth.github.callback');
+});
+
 
 //Rutas de la subasta
 
@@ -73,6 +96,28 @@ Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('produc
 
 // Ruta para hacer una oferta en una subasta
 Route::post('/subastas/{subasta}/pujar', [SubastaController::class, 'pujar'])->name('subastas.pujar');
+
+// Rutas para el chat
+Route::middleware('auth')->group(function () {
+   // Ruta para el chat entre dos usuarios
+Route::get('/chat', [MensajeController::class, 'index'])->name('chat.index');
+
+// Ruta para enviar un mensaje
+Route::post('/chat/send', [MensajeController::class, 'send'])->name('chat.send');
+});
+
+// Rutas de productos
+Route::get('/dashboard/search', [CategoriaController::class, 'buscarPorCategoria'])->name('dashboard.search');
+
+// Rutas de productos
+Route::resource('categorias', CategoriaController::class);
+Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
+Route::get('/categorias/create', [CategoriaController::class, 'crear'])->name('categorias.create');
+Route::post('/categorias', [CategoriaController::class, 'tienda'])->name('categorias.tienda');
+Route::get('/categorias/{id}/editar', [CategoriaController::class, 'edit'])->name('categorias.editar');
+Route::put('/categorias/{id}', [CategoriaController::class, 'actualizar'])->name('categorias.actualizar');
+Route::delete('/categorias/{id}', [CategoriaController::class, 'eliminar'])->name('categorias.eliminar');
+
 
 // Ruta para agregar un comentario a un producto
 Route::post('/productos/{id}/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
