@@ -57,6 +57,7 @@ Route::middleware('guest')->group(function () {
     Route::get('auth/github/callback', [SocialAuthController::class, 'handleGitHubCallback'])->name('auth.github.callback');
 });
 
+Route::post('/subastas/{id}/pujar', [PujaController::class, 'pujar'])->name('subastas.pujar');
 
 //Rutas de la subasta
 
