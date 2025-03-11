@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\PujaController;
 
 
 
@@ -125,6 +126,9 @@ Route::post('/categorias', [CategoriaController::class, 'tienda'])->name('catego
 Route::get('/categorias/{id}/editar', [CategoriaController::class, 'edit'])->name('categorias.editar');
 Route::put('/categorias/{id}', [CategoriaController::class, 'actualizar'])->name('categorias.actualizar');
 Route::delete('/categorias/{id}', [CategoriaController::class, 'eliminar'])->name('categorias.eliminar');
+
+//Ruta para la puja
+Route::post('/subastas/{id}/pujar', [PujaController::class, 'pujar'])->name('subastas.pujar');
 
 
 // Ruta para agregar un comentario a un producto
